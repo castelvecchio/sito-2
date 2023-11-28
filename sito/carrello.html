@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negozio Online - Carrello</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-image: url('arance2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        #listaCarrello {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #totaleCarrello {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #concludiAcquisto {
+            margin-top: 10px;
+        }
+
+        .azione-prodotto {
+            margin-left: 10px;
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Il Tuo Negozio Online - Carrello</h1>
+
+    <!-- Barra di navigazione -->
+    <nav>
+        <a href="pagina1sito.html"><button>Home</button></a>
+        <a href="Sitofruttacastelvecchio.html"><button>Chi siamo</button></a>
+        <a href="paginaprodotti.html"><button>Prodotti</button></a>
+        <a href="catalogo.html"><button>Prenota i nostri prodotti</button></a>
+        <a href="carrello.html"><button>Carrello</button></a>
+        <a href="carrello2.html"><button>Concludi acquisto</button></a>
+    </nav>
+
+    <!-- Carrello -->
+    <section id="carrello">
+        <h2>Il Tuo Carrello</h2>
+        <ul id="listaCarrello"></ul>
+        <p id="totaleCarrello">Totale: €0.00</p>
+        <button onclick="tornaAlCatalogo()">Torna al Catalogo</button>
+        <button id="concludiAcquisto">Concludi Acquisto</button>
+    </section>
+
+    <script>
+        function rimuoviDalCarrello(nomeProdotto) {
+            var carrello = JSON.parse(sessionStorage.getItem('carrello')) || [];
+            var index = carrello.findIndex(function(prodottoCarrello) {
+                return prodottoCarrello.nome === nomeProdotto;
+            });
+
+            if (index !== -1) {
+                carrello.splice(index, 1);
+                sessionStorage.setItem('carrello', JSON.stringify(carrello));
+                visualizzaCarrello();
+            }
+        }
+
+        function decrementaQuantita(nomeProdotto) {
+            var carrello = JSON.parse(sessionStorage.getItem('carrello')) || [];
+            var index = carrello.findIndex(function(prodottoCarrello) {
+                return prodottoCarrello.nome === nomeProdotto;
+            });
+
+            if (index !== -1) {
+                carrello[index].quantita -= 1;
+
+                if (carrello[index].quantita === 0) {
+                    carrello.splice(index, 1);
+                }
+
+                sessionStorage.setItem('carrello', JSON.stringify(carrello));
+                visualizzaCarrello();
+            }
+        }
+
+        function visualizzaCarrello() {
+            var listaCarrello = document.getElementById("listaCarrello");
+            var totaleCarrello = document.getElementById("totaleCarrello");
+
+            var carrello = JSON.parse(sessionStorage.getItem('carrello')) || [];
+            listaCarrello.innerHTML = "";
+
+            var totale = 0;
+            carrello.forEach(function(prodottoCarrello) {
+                var listItem = document.createElement("li");
+                listItem.textContent = prodottoCarrello.nome + " x" + prodottoCarrello.quantita + " - €" + (prodottoCarrello.prezzo * prodottoCarrello.quantita).toFixed(2);
+
+                var rimuoviLink = document.createElement("span");
+                rimuoviLink.textContent = " elimina il prodotto";
+                rimuoviLink.className = "azione-prodotto";
+                rimuoviLink.onclick = function() {
+                    rimuoviDalCarrello(prodottoCarrello.nome);
+                };
+
+                var decrementaLink = document.createElement("span");
+                decrementaLink.textContent = "Rimuovi dal carrello";
+                decrementaLink.className = "azione-prodotto";
+                decrementaLink.onclick = function() {
+                    decrementaQuantita(prodottoCarrello.nome);
+                };
+
+                
+                listItem.appendChild(decrementaLink);
+                listaCarrello.appendChild(listItem);
+
+                totale += prodottoCarrello.prezzo * prodottoCarrello.quantita;
+            });
+
+            totaleCarrello.textContent = "Totale: €" + totale.toFixed(2);
+        }
+
+        function tornaAlCatalogo() {
+            location.href = "catalogo.html";
+        }
+
+        function concludiAcquisto() {
+            // Redirect a carrello2.html quando il pulsante "Concludi Acquisto" viene cliccato
+            location.href = "carrello2.html";
+        }
+
+        window.onload = function() {
+            // Visualizza il carrello quando la pagina si carica
+            visualizzaCarrello();
+
+            // Aggiungi un event listener al pulsante "Concludi Acquisto"
+            var concludiAcquistoButton = document.getElementById("concludiAcquisto");
+            concludiAcquistoButton.addEventListener("click", concludiAcquisto);
+        };
+    </script>
+
+</body>
+</html>

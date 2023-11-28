@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negozio Online - Catalogo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-image: url('arance2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        .prodotto {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Il Tuo Negozio Online</h1>
+
+    <!-- Barra di navigazione -->
+    <head>
+      
+        <a href="pagina1sito.html"><button>Home</button></a>
+        <a href="Sitofruttacastelvecchio.html"><button>Chi siamo</button></a>
+        <a href="paginaprodotti.html"><button>Prodotti</button></a>
+        <a href="catalogo.html"><button>Prenota i nostri prodotti</button></a>
+        <a href="carrello.html"><button>Carrello</button></a>
+        <a href="carrello2.html"><button>Concludi acquisto</button></a>
+    
+        </head>
+
+    <!-- Catalogo -->
+    <section id="catalogo">
+        <h2>Catalogo Prodotti</h2>
+    <div class="prodotto">
+        <img src=".jpg" >
+        <p>caco mela</p>
+        <p> Prezzo:€3</p>
+        <label for="quantitaProdotto1">Quantità:</label>
+        <input type="number" id="quantitaProdotto1" name="quantitaProdotto1" value="1" min="1">
+        <button onclick="aggiungiAlCarrello('Caco mela', 3, 'quantitaProdotto1')">Aggiungi al Carrello</button>
+    </div>
+    <div class="prodotto">
+        <img src=".jpg" >
+        <p>Prodotto 2</p>
+        <p>Prezzo</p>
+        <label for="quantitaProdotto2">Quantità:</label>
+        <input type="number" id="quantitaProdotto2" name="quantitaProdotto2" value="1" min="1">
+        <button onclick="aggiungiAlCarrello('Prodotto 2', Prezzo, 'quantitaProdotto2')">Aggiungi al Carrello</button>
+        
+    </div>
+    <div class="prodotto">
+        <img src=".jpg" alt="">
+        <p>Nome Prodotto 3</p>
+        <p>Prezzo= €</p>
+        <label for="quantitaProdotto3">Quantità:</label>
+        <input type="number" id="quantitaProdotto3" name="quantitaProdotto1" value="1" min="1">
+        <button onclick="aggiungiAlCarrello('Prodotto 3', Prezzo, 'quantitaProdotto3')">Aggiungi al Carrello</button>
+    </div>
+    <div class="prodotto">
+        <img src=".jpg" alt="">
+        <p>Nome Prodotto 4</p>
+        <p>Prezzo=€</p>
+        <label for="quantitaProdotto4">Quantità:</label>
+        <input type="number" id="quantitaProdotto4" name="quantitaProdotto4" value="1" min="1">
+        <button onclick="aggiungiAlCarrello('Prodotto 4', Prezzo, 'quantitaProdotto4')">Aggiungi al Carrello</button>
+    </div>
+    <div class="prodotto">
+        <img src=".jpg" alt="">
+        <p>Nome Prodotto 5</p>
+        <p>Prezzo=€ </p>
+        <label for="quantitaProdotto5">Quantità:</label>
+        <input type="number" id="quantitaProdotto5" name="quantitaProdotto5" value="1" min="1">
+        <button onclick="aggiungiAlCarrello('Prodotto 5', Prezzo, 'quantitaProdotto5')">Aggiungi al Carrello</button>
+    </div>
+    <div class="prodotto">
+        <img src=".jpg" alt="">
+        <p>Nome Prodotto 6</p>
+        <p>Prezzo=€ </p>
+        <label for="quantitaProdotto6">Quantità:</label>
+        <input type="number" id="quantitaProdotto6" name="quantitaProdotto6" value="1" min="1">
+        <button onclick="aggiungiAlCarrello('Prodotto 6', Prezzo, 'quantitaProdotto6')">Aggiungi al Carrello</button>
+    </div>
+    <div class="prodotto">
+        <img src=".jpg" alt="">
+        <p>Nome Prodotto 7</p>
+        <p>Prezzo= €</p>
+        <label for="quantitaProdotto7">Quantità:</label>
+        <input type="number" id="quantitaProdotto7" name="quantitaProdotto7" value="1" min="1">
+        <button onclick="aggiungiAlCarrello('Prodotto 7', Prezzo, 'quantitaProdotto7')">Aggiungi al Carrello</button>
+    </div>
+</section>
+    
+
+    <script>
+        var catalogo = [
+            { nome: 'Caco mela', prezzo: 3, quantitaDisponibile: 10 },
+            // Aggiungi altri prodotti al catalogo
+        ];
+
+        var carrello = [];
+        console.log("Catalogo:", catalogo);
+
+        function aggiungiAlCarrello(nomeProdotto, prezzo, idInputQuantita) {
+        var quantita = parseInt(document.getElementById(idInputQuantita).value);
+
+        console.log("Tentativo di aggiungere al carrello:", nomeProdotto, "Quantità:", quantita);
+        if (quantita > 0) {
+            var prodottoCatalogo = catalogo.find(function(prodotto) {
+                return prodotto.nome === nomeProdotto;
+            });
+        console.log("Prodotto nel catalogo:", prodottoCatalogo);
+            if (prodottoCatalogo && quantita <= prodottoCatalogo.quantitaDisponibile) {
+                // Utilizza la session storage per condividere lo stato del carrello
+                var carrello = JSON.parse(sessionStorage.getItem('carrello')) || [];
+
+                carrello.push({
+                    nome: nomeProdotto,
+                    prezzo: prezzo,
+                    quantita: quantita
+                });
+
+                sessionStorage.setItem('carrello', JSON.stringify(carrello));
+
+                prodottoCatalogo.quantitaDisponibile <= quantita;
+
+                alert("Prodotto aggiunto al carrello!");
+            } else {
+                alert("Quantità non disponibile per " + nomeProdotto);
+            }
+        } else {
+            alert("Inserisci una quantità valida.");
+        }
+    }
+        
+    </script>
+
+</body>
+</html>

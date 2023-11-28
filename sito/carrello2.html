@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negozio Online - Prenotazione</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-image: url('arance2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Il Tuo Negozio Online</h1>
+
+    <!-- Acquisto -->
+    <section id="acquisto">
+        <h2>Concludi Acquisto</h2>
+        <form id="datiClienteForm">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" class="casellaDiTesto" placeholder="Inserisci il tuo nome" required>
+            <br>
+            <label for="cognome">Cognome:</label>
+            <input type="text" id="cognome" class="casellaDiTesto" placeholder="Inserisci il tuo cognome" required>
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" class="casellaDiTesto" placeholder="Inserisci la tua email" required>
+            <br>
+            <label for="note">Note:</label>
+            <textarea id="note" class="casellaDiTesto" placeholder="Inserisci eventuali note"></textarea>
+            <br>
+            <button type="button" class="bottone" onclick="concludiAcquisto()">Concludi Acquisto</button>
+        </form>
+    </section>
+
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        emailjs.init("gc5XGCbE4f7musoOc");
+
+        function inviaEmail(destinatario, oggetto, corpo) {
+            emailjs.send("servizio", "template_zhbxuoj", {
+                to_email: destinatario,
+                subject: oggetto,
+                message: corpo
+            })
+            .then(function(response) {
+                console.log("Email inviata con successo:", response);
+            })
+            .catch(function(error) {
+                console.error("Errore durante l'invio dell'email:", error);
+            });
+        }
+
+        function concludiAcquisto() {
+            var emailCliente = document.getElementById("email").value;
+            var oggettoCliente = "Conferma Prenotazione";
+            var corpoCliente = `Grazie ${document.getElementById("nome").value} ${document.getElementById("cognome").value} per la tua prenotazione. Ecco il riepilogo della tua prenotazione:\n`;
+
+            var totale = 0;
+            // Sostituisci questa parte con il tuo array carrello effettivo
+            var carrello = [
+                { nome: 'Prodotto 1', quantita: 2, prezzo: 10 },
+                { nome: 'Prodotto 2', quantita: 1, prezzo: 5 }
+            ];
+
+            carrello.forEach(function(prodottoCarrello) {
+                corpoCliente += `${prodottoCarrello.quantita} x ${prodottoCarrello.nome} - €${(prodottoCarrello.prezzo * prodottoCarrello.quantita).toFixed(2)}\n`;
+                totale += prodottoCarrello.prezzo * prodottoCarrello.quantita;
+            });
+
+            corpoCliente += `\nTotale: €${totale.toFixed(2)}`;
+            corpoCliente += "\nLa tua prenotazione deve essere rispettata. In caso di problemi, contatta l'azienda il prima possibile.";
+
+            // Aggiungi le note al corpo dell'email
+            var noteCliente = document.getElementById("note").value;
+            if (noteCliente) {
+                corpoCliente += `\n\nNote del Cliente: ${noteCliente}`;
+            }
+
+            inviaEmail(emailCliente, oggettoCliente, corpoCliente);
+
+            var oggettoAzienda = "Nuova Prenotazione Ricevuta";
+            var corpoAzienda = `Nuova prenotazione ricevuta da:\nNome: ${document.getElementById("nome").value}\nCognome: ${document.getElementById("cognome").value}\nEmail: ${emailCliente}\n`;
+
+            corpoAzienda += "Dettagli della prenotazione:\n";
+            carrello.forEach(function(prodottoCarrello) {
+                corpoAzienda += `${prodottoCarrello.quantita} x ${prodottoCarrello.nome}\n`;
+            });
+
+            corpoAzienda += `\nTotale: €${totale.toFixed(2)}`;
+
+            // Aggiungi le note al corpo dell'email
+            var noteAzienda = document.getElementById("note").value;
+            if (noteAzienda) {
+                corpoAzienda += `\n\nNote del Cliente: ${noteAzienda}`;
+            }
+
+            inviaEmail("frutta.castelvecchio@gmail.com", oggettoAzienda, corpoAzienda);
+
+            alert("Prenotazione conclusa! Riceverai una ricevuta via email.");
+        }
+    </script>
+
+</body>
+</html>
+
+
